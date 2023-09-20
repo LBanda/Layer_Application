@@ -1,30 +1,26 @@
-from csv import DictReader
+import csv
 
 
 class ItemRepository:
 
-    def __init__(self, filename):
+    def __init__(self):
         self.items = []
-        with open(filename, "r") as f:
-            reader = DictReader(f)
+        self.load_items()
+
+    def load_items(self):
+        with open('sample_grocery.csv', 'r') as f:
+            reader = csv.DictReader(f)
             for row in reader:
                 self.items.append(row)
 
-    def get_all(self):
+    def get_items(self):
         return self.items
 
-    def get_by_sku(self, sku):
-        for item in self.items:
-            if item["sku"] == sku:
-                return item
-        return None
-
-    def add(self, item):
+    def add_item(self, item):
         self.items.append(item)
 
-    def delete(self, sku):
-        for i, item in enumerate(self.items):
-            if item["sku"] == sku:
-                del self.items[i]
-                return
-        return None
+    def delete_item(self, sku):
+        for index, item in enumerate(self.items):
+            if item['sku'] == sku:
+                del self.items[index]
+                break

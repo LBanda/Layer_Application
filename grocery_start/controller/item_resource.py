@@ -1,17 +1,21 @@
-from flask import Flask, request
-from flask_restful import Resource, Api
-
+import json
 from repository.item_repository import ItemRepository
+item_repository = ItemRepository()
 
+class ItemController:
 
-class ItemResource(Resource):
+    def __init__(self, item_repository):
+        self.item_repository = item_repository
 
-    def get(self):
-        return ItemRepository().get_all()
+    def get_items(self):
+        items = self.item_repository.get_items()
+        return json.dumps(items)
 
-    def post(self):
-        item = request.get_json()
-        return ItemRepository().add(item)
+    def add_item(self):
+        item = json.loads(request.data)
+        self.item_repository.add_item(item)
+        return 'Item added successfully'
 
-    def delete(self, sku):
-        return ItemRepository().delete(sku)
+    def delete_item(self, sku):
+        self.item_repository.delete_item(sku)
+        return 'Item deleted successfully'
